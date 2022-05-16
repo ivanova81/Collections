@@ -273,6 +273,40 @@ namespace Collections.UnitTests
             names[1] = "Grace";
             Assert.That(names.ToString(), Is.EqualTo("[David, Grace]"));
         }
+        
+        [TestCase("Peter", 0, "Peter")]
+        [TestCase("Peter, Maria, George", 0, "Peter")]
+        [TestCase("Peter, Maria, George", 1, "Maria")]
+        [TestCase("Peter, Maria, George", 2, "George")]
+
+        public void Test_Collection_GetByValidIndex(
+            string data, int index, string expectedValue)
+        {
+            //Arrange
+            var nums = new Collection<string>(data.Split(", "));
+
+            //Act
+            var actual = nums[index];
+
+            //Assert
+            Assert.AreEqual(expectedValue, actual);
+        }
+        [TestCase("", 0)]
+        [TestCase("Peter", -1)]
+        [TestCase("Peter", 1)]
+        [TestCase("Peter, Maria, George", -1)]
+        [TestCase("Peter, Maria, George", 3)]
+        [TestCase("Peter, Maria, George", 150)]
+
+        public void Test_Collection_GetByInvalidIndexes2(
+            string data, int index)
+        {
+            //Arrange
+            var items = new Collection<string>(data.Split(", ", StringSplitOptions.RemoveEmptyEntries));
+
+            //Assert
+            Assert.That(() => items[index], Throws.TypeOf<ArgumentOutOfRangeException>());
+        }
     }
 }
     
